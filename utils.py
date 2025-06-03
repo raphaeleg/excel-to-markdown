@@ -32,7 +32,7 @@ def clean_md(markdown):
     return markdown.replace("nan", "").replace("Unnamed: ", "").strip()
 
 def convert_xlsx_md(df):
-    markdown = "| " + " | ".join(df.columns) + " |\n"
+    markdown = "| " + " | ".join(str(cell) for cell in df.columns) + " |\n"
     markdown += "| " + " | ".join(["---"] * len(df.columns)) + " |\n"
 
     for _, row in df.iterrows():
@@ -76,7 +76,7 @@ def show_mds(output_dir):
         st.write("No Markdown files found.")
         return
     
-    for file in files:
+    for file in reversed(files):
         file_path = os.path.join(output_dir, file)
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
