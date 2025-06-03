@@ -69,6 +69,26 @@ def download_zip_btn(output_file_name):
             mime="application/zip"
         )
 
+def show_mds(output_dir):
+    files = os.listdir(output_dir)
+    
+    if not files:
+        st.write("No Markdown files found.")
+        return
+    
+    for file in files:
+        file_path = os.path.join(output_dir, file)
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            with st.expander(file):
+                st.code(content, language="markdown")
+
+def show_results(output_file_name, output_dir):
+    st.divider()
+    st.markdown("## Complete!\n\nYou may directly copy the contents of individual Markdown files below by clicking the icon at the top-right corner\n\nYou can also download all files here:")
+    download_zip_btn(output_file_name)
+    show_mds(output_dir)
+
 def convert_workbook_md(output_dir, uploaded_file, output_file_name):
     data = load_excel_file(uploaded_file)
     
@@ -86,5 +106,5 @@ def convert_workbook_md(output_dir, uploaded_file, output_file_name):
         st.error("An error occurred while creating the ZIP file.")
         return
     
-    download_zip_btn(output_file_name)
+    show_results(output_file_name, output_dir)
     
